@@ -26,11 +26,12 @@ func New[T any](exec func(resolve func(T), reject func(error))) *Promise[T] {
 		panic("executor cannot be nil")
 	}
 
-	p := Promise[T]{
+	p := &Promise[T]{
 		status: PENDING,
-		mutex:  new(sync.Mutex),
-		wg:     new(sync.WaitGroup),
+		mutex:  &sync.Mutex{},
+		wg:     &sync.WaitGroup{},
 	}
+
 	p.wg.Add(1)
 
 	go func() {
@@ -46,7 +47,7 @@ func New[T any](exec func(resolve func(T), reject func(error))) *Promise[T] {
 		exec(p.resolve, p.reject)
 	}()
 
-	return &p
+	return p
 }
 
 func (p *Promise[T]) resolve(val T) {

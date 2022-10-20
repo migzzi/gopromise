@@ -74,9 +74,9 @@ func TestNew(t *testing.T) {
 	p := New(func(resolve func(any), reject func(error)) {
 		resolve(42)
 	})
-	assertNotNil(t, p)
 
 	res, err := p.Await()
+	assertNotNil(t, p)
 	assertEqual(t, res, 42)
 	assertNotErr(t, err)
 }
