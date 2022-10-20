@@ -140,36 +140,6 @@ type pair[T, R any] struct {
 	second R
 }
 
-func All2[T any](promises ...*Promise[T]) *Promise[[]T] {
-	return New(func(resolve func([]T), reject func(error)) {
-		valueschan := make(chan pair[int, T], len(promises))
-		errChan := make(chan error, 1)
-		for idx, p := range promises {
-			idx := idx
-			_ = Then(p, func(val T) T {
-				valueschan <- pair[int, T]{idx, val}
-				return val
-			})
-			_ = Catch(p, func(err error) error {
-				errChan <- err
-				return err
-			})
-		}
-
-		values := make([]T, len(promises))
-		for idx := 0; idx < len(promises); idx++ {
-			select {
-			case val := <-valueschan:
-				values[val.first] = val.second
-			case err := <-errChan:
-				reject(err)
-				return
-			}
-		}
-		resolve(values)
-	})
-}
-
 func All[T any](promises ...*Promise[T]) *Promise[[]T] {
 	if len(promises) == 0 {
 		return nil
