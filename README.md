@@ -19,6 +19,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+    "ioutil"
 
 	"github.com/migzzi/gopromise"
 )
