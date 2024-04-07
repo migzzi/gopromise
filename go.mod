@@ -1,3 +1,3 @@
-module github.com/migzzi/gopromise.git
+module github.com/migzzi/gopromise
 
 go 1.19
